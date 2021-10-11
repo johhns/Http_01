@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText android:id="@+id/EditText01"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="palabra a buscar"/>
+    <Button android:id="@+id/Button01"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:onClick="buscar"
+        android:text="buscar en Google"/>
+    <Button android:id="@+id/Button02"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:onClick="buscar2"
+        android:text="buscar 2"/>
+    <TextView android:id="@+id/TextView01"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:textSize="8pt"/>
+</LinearLayout>
