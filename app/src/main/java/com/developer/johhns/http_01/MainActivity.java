@@ -11,21 +11,34 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText entrada;
-    private TextView salida;
+    private TextView salida ;
+    private RequestQueue  colaHttp ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        colaHttp = Volley.newRequestQueue(getApplicationContext()) ;
 
         entrada = (EditText) findViewById(R.id.EditText01);
         salida = (TextView) findViewById(R.id.TextView01);
@@ -46,6 +59,47 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void buscar2(View view){
+        String palabras = entrada.getText().toString();
+        salida.append(palabras + "--");
+        new BuscarGoogle().execute(palabras);
+    }
+
+    public void buscar4( View view ){
+        String palabras = entrada.getText().toString() ;
+        try {
+            resultadosVolley();
+        } catch ( Exception e ){
+           e.printStackTrace();
+        }
+    }
+
+    private void resultadosVolley(){
+        StringRequest  peticion = new StringRequest(Request.Method.GET,
+                "http://appserver.iea.com.sv/wsag/Sag_HH_Util.Sincronizar_Departamentos",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String resultado = response ;
+                        salida.append( resultado );
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        salida.append("Error : " + error.getMessage() );
+                    }
+                }
+        ){
+            @Override
+           public Map<String,String> getHeaders() throws AuthFailureError {
+                Map<String,String> cabeceras = new HashMap<String,String>();
+                cabeceras.put("User-Agent","Mozilla/5.0 (Window NT 6.1)") ;
+                return cabeceras ;
+            }
+        } ;
+        colaHttp.add( peticion ) ;
+    }
 
     public String resultadosGoogle(String palabras) throws Exception {
         String pagina = "", devuelve = "";
@@ -84,11 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void buscar2(View view){
-        String palabras = entrada.getText().toString();
-        salida.append(palabras + "--");
-        new BuscarGoogle().execute(palabras);
-    }
+
 
     class BuscarGoogle extends AsyncTask<String, Void, String> {
         private ProgressDialog progreso;
