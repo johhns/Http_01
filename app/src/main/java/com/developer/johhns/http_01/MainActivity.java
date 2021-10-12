@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -33,11 +34,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView salida ;
     private RequestQueue  colaHttp ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+/*
+        ImageView imagen = new ImageView(getApplicationContext());
+        imagen.setImageBitmap();
+        imagen.setImageResource();
+        */
         colaHttp = Volley.newRequestQueue(getApplicationContext()) ;
 
         entrada = (EditText) findViewById(R.id.EditText01);
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void buscar4( View view ){
         String palabras = entrada.getText().toString() ;
+        salida.setText("Resultato : \n");
         try {
             resultadosVolley();
         } catch ( Exception e ){
